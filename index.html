@@ -1,452 +1,280 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class=""> <!-- Class will be toggled here -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Density, Mass & Volume Calculator</title>
+    <title>Density, Mass, & Volume Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #333;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Inter', sans-serif;
         }
-        
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            margin-top: 20px;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        h1 {
-            color: #1a2a6c;
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-        }
-        
-        .subtitle {
-            color: #555;
-            font-size: 1.2rem;
-        }
-        
-        .formula-section {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-left: 5px solid #1a2a6c;
-        }
-        
-        .formula {
-            font-size: 1.5rem;
-            text-align: center;
-            margin: 15px 0;
-            font-weight: bold;
-            color: #1a2a6c;
-        }
-        
-        .calculator {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .calculator {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        .calc-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .calc-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .calc-title {
-            color: #1a2a6c;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-            border-bottom: 2px solid #fdbb2d;
-            padding-bottom: 8px;
-        }
-        
-        .input-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        
-        button {
-            background: linear-gradient(to right, #1a2a6c, #b21f1f);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            width: 100%;
+        .tab-button {
             transition: all 0.3s ease;
         }
-        
-        button:hover {
-            background: linear-gradient(to right, #b21f1f, #1a2a6c);
-            transform: scale(1.02);
+        /* The active state is now managed by Tailwind classes directly on the button for easier dark mode toggling */
+        .tab-button.active {
+            color: #4f46e5;
         }
-        
-        .result {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #e9f7ef;
-            border-radius: 5px;
-            border-left: 4px solid #28a745;
-            display: none;
-        }
-        
-        .result.show {
-            display: block;
-        }
-        
-        .result h3 {
-            color: #28a745;
-            margin-bottom: 5px;
-        }
-        
-        .examples {
-            margin-top: 30px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-        }
-        
-        .examples h2 {
-            color: #1a2a6c;
-            margin-bottom: 15px;
-        }
-        
-        .example-item {
-            margin-bottom: 15px;
-            padding: 10px;
-            background: white;
-            border-radius: 5px;
-        }
-        
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            color: white;
-            font-size: 0.9rem;
-        }
-        
-        .units {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .unit-select {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .dark .tab-button.active {
+             color: #a5b4fc;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Density, Mass & Volume Calculator</h1>
-            <p class="subtitle">A tool for integrated chemistry and physics calculations</p>
-        </header>
-        
-        <section class="formula-section">
-            <h2>The Density Formula</h2>
-            <p class="formula">Density (ρ) = Mass (m) / Volume (V)</p>
-            <p>Where:</p>
-            <ul>
-                <li><strong>Density (ρ)</strong> is the mass per unit volume of a substance</li>
-                <li><strong>Mass (m)</strong> is the amount of matter in an object</li>
-                <li><strong>Volume (V)</strong> is the amount of space an object occupies</li>
-            </ul>
-        </section>
-        
-        <div class="calculator">
-            <div class="calc-card">
-                <h3 class="calc-title">Calculate Density</h3>
-                <div class="input-group">
-                    <label for="mass-density">Mass:</label>
-                    <div class="units">
-                        <input type="number" id="mass-density" placeholder="Enter mass">
-                        <select class="unit-select" id="mass-unit-density">
-                            <option value="g">g</option>
-                            <option value="kg">kg</option>
-                            <option value="lb">lb</option>
-                        </select>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center p-4 transition-colors duration-500">
+
+    <div class="w-full max-w-2xl mx-auto relative">
+        <!-- Dark Mode Toggle Button -->
+        <div class="absolute top-0 right-0 p-4">
+            <button id="theme-toggle" class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                <svg id="theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 6.464l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 100-2H2a1 1 0 100 2h1zM6.464 16.364l.707-.707a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414z"></path></svg>
+            </button>
+        </div>
+
+        <div class="text-center mb-8 pt-12 md:pt-0">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white">Chemistry & Physics Calculator</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Easily calculate Density, Mass, and Volume</p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg transition-colors duration-500">
+            <!-- Tabs for selecting calculation type -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+                <button id="tab-density" class="tab-button flex-1 py-3 text-lg font-semibold text-gray-600 dark:text-gray-300 focus:outline-none active" onclick="switchTab('density')">Calculate Density</button>
+                <button id="tab-mass" class="tab-button flex-1 py-3 text-lg font-semibold text-gray-600 dark:text-gray-300 focus:outline-none" onclick="switchTab('mass')">Calculate Mass</button>
+                <button id="tab-volume" class="tab-button flex-1 py-3 text-lg font-semibold text-gray-600 dark:text-gray-300 focus:outline-none" onclick="switchTab('volume')">Calculate Volume</button>
+            </div>
+
+            <!-- Calculator Panels -->
+            <div id="panel-density">
+                <p class="text-center text-gray-500 dark:text-gray-400 mb-4">Enter mass and volume to find the density.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label for="d_mass" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mass (grams)</label>
+                        <input type="number" id="d_mass" placeholder="e.g., 100" class="mt-1 block w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
-                <div class="input-group">
-                    <label for="volume-density">Volume:</label>
-                    <div class="units">
-                        <input type="number" id="volume-density" placeholder="Enter volume">
-                        <select class="unit-select" id="volume-unit-density">
-                            <option value="cm3">cm³</option>
-                            <option value="m3">m³</option>
-                            <option value="L">L</option>
-                            <option value="mL">mL</option>
-                        </select>
+                    <div>
+                        <label for="d_volume" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Volume (cm³ or mL)</label>
+                        <input type="number" id="d_volume" placeholder="e.g., 50" class="mt-1 block w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
-                <button onclick="calculateDensity()">Calculate Density</button>
-                <div class="result" id="density-result">
-                    <h3>Result:</h3>
-                    <p id="density-value"></p>
+                    <button onclick="calculateDensity()" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">Calculate</button>
+                    <div id="result-density" class="bg-gray-100 dark:bg-gray-700 border-l-4 border-indigo-500 p-4 rounded-lg mt-4 hidden">
+                        <p class="text-lg font-semibold text-gray-800 dark:text-gray-100"></p>
+                    </div>
                 </div>
             </div>
-            
-            <div class="calc-card">
-                <h3 class="calc-title">Calculate Mass</h3>
-                <div class="input-group">
-                    <label for="density-mass">Density:</label>
-                    <div class="units">
-                        <input type="number" id="density-mass" placeholder="Enter density">
-                        <select class="unit-select" id="density-unit-mass">
-                            <option value="g/cm3">g/cm³</option>
-                            <option value="kg/m3">kg/m³</option>
-                            <option value="lb/ft3">lb/ft³</option>
-                        </select>
+
+            <div id="panel-mass" class="hidden">
+                 <p class="text-center text-gray-500 dark:text-gray-400 mb-4">Enter density and volume to find the mass.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label for="m_density" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Density (g/cm³)</label>
+                        <input type="number" id="m_density" placeholder="e.g., 2" class="mt-1 block w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
-                <div class="input-group">
-                    <label for="volume-mass">Volume:</label>
-                    <div class="units">
-                        <input type="number" id="volume-mass" placeholder="Enter volume">
-                        <select class="unit-select" id="volume-unit-mass">
-                            <option value="cm3">cm³</option>
-                            <option value="m3">m³</option>
-                            <option value="L">L</option>
-                            <option value="mL">mL</option>
-                        </select>
+                    <div>
+                        <label for="m_volume" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Volume (cm³ or mL)</label>
+                        <input type="number" id="m_volume" placeholder="e.g., 50" class="mt-1 block w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
-                <button onclick="calculateMass()">Calculate Mass</button>
-                <div class="result" id="mass-result">
-                    <h3>Result:</h3>
-                    <p id="mass-value"></p>
+                    <button onclick="calculateMass()" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">Calculate</button>
+                    <div id="result-mass" class="bg-gray-100 dark:bg-gray-700 border-l-4 border-indigo-500 p-4 rounded-lg mt-4 hidden">
+                        <p class="text-lg font-semibold text-gray-800 dark:text-gray-100"></p>
+                    </div>
                 </div>
             </div>
-            
-            <div class="calc-card">
-                <h3 class="calc-title">Calculate Volume</h3>
-                <div class="input-group">
-                    <label for="mass-volume">Mass:</label>
-                    <div class="units">
-                        <input type="number" id="mass-volume" placeholder="Enter mass">
-                        <select class="unit-select" id="mass-unit-volume">
-                            <option value="g">g</option>
-                            <option value="kg">kg</option>
-                            <option value="lb">lb</option>
-                        </select>
+
+            <div id="panel-volume" class="hidden">
+                 <p class="text-center text-gray-500 dark:text-gray-400 mb-4">Enter mass and density to find the volume.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label for="v_mass" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mass (grams)</label>
+                        <input type="number" id="v_mass" placeholder="e.g., 100" class="mt-1 block w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
-                <div class="input-group">
-                    <label for="density-volume">Density:</label>
-                    <div class="units">
-                        <input type="number" id="density-volume" placeholder="Enter density">
-                        <select class="unit-select" id="density-unit-volume">
-                            <option value="g/cm3">g/cm³</option>
-                            <option value="kg/m3">kg/m³</option>
-                            <option value="lb/ft3">lb/ft³</option>
-                        </select>
+                    <div>
+                        <label for="v_density" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Density (g/cm³)</label>
+                        <input type="number" id="v_density" placeholder="e.g., 2" class="mt-1 block w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
-                <button onclick="calculateVolume()">Calculate Volume</button>
-                <div class="result" id="volume-result">
-                    <h3>Result:</h3>
-                    <p id="volume-value"></p>
+                    <button onclick="calculateVolume()" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">Calculate</button>
+                    <div id="result-volume" class="bg-gray-100 dark:bg-gray-700 border-l-4 border-indigo-500 p-4 rounded-lg mt-4 hidden">
+                        <p class="text-lg font-semibold text-gray-800 dark:text-gray-100"></p>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <section class="examples">
-            <h2>Common Density Values</h2>
-            <div class="example-item">
-                <strong>Water:</strong> 1.0 g/cm³ or 1000 kg/m³
-            </div>
-            <div class="example-item">
-                <strong>Iron:</strong> 7.87 g/cm³ or 7870 kg/m³
-            </div>
-            <div class="example-item">
-                <strong>Aluminum:</strong> 2.70 g/cm³ or 2700 kg/m³
-            </div>
-            <div class="example-item">
-                <strong>Air:</strong> 0.0012 g/cm³ or 1.2 kg/m³
-            </div>
-            <div class="example-item">
-                <strong>Gold:</strong> 19.3 g/cm³ or 19300 kg/m³
-            </div>
-        </section>
+        <!-- Formula Explanation -->
+        <div class="mt-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors duration-500">
+             <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-3">Understanding the Formulas</h3>
+             <div class="flex flex-col md:flex-row justify-around text-center space-y-4 md:space-y-0">
+                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <p class="text-lg font-medium text-indigo-600 dark:text-indigo-400">Density =</p>
+                    <p class="text-2xl font-bold text-gray-700 dark:text-gray-200">Mass / Volume</p>
+                </div>
+                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <p class="text-lg font-medium text-indigo-600 dark:text-indigo-400">Mass =</p>
+                    <p class="text-2xl font-bold text-gray-700 dark:text-gray-200">Density × Volume</p>
+                </div>
+                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <p class="text-lg font-medium text-indigo-600 dark:text-indigo-400">Volume =</p>
+                    <p class="text-2xl font-bold text-gray-700 dark:text-gray-200">Mass / Density</p>
+                </div>
+             </div>
+        </div>
+
+        <!-- SI Units Cheat Sheet -->
+        <div class="mt-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors duration-500">
+             <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">SI Units Cheat Sheet</h3>
+             <div class="space-y-4">
+                 <div>
+                     <h4 class="font-semibold text-lg text-gray-700 dark:text-gray-200">Mass</h4>
+                     <p class="text-gray-600 dark:text-gray-400"><strong>SI Unit:</strong> Kilogram (kg)</p>
+                     <p class="text-gray-600 dark:text-gray-400"><strong>Commonly Used:</strong> Gram (g), Milligram (mg)</p>
+                 </div>
+                 <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                 <div>
+                     <h4 class="font-semibold text-lg text-gray-700 dark:text-gray-200">Volume</h4>
+                     <p class="text-gray-600 dark:text-gray-400"><strong>SI Unit:</strong> Cubic Meter (m³)</p>
+                     <p class="text-gray-600 dark:text-gray-400"><strong>Commonly Used:</strong> Liter (L), Milliliter (mL), Cubic Centimeter (cm³)</p>
+                     <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">Note: 1 mL is the same as 1 cm³.</p>
+                 </div>
+                 <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                 <div>
+                     <h4 class="font-semibold text-lg text-gray-700 dark:text-gray-200">Density</h4>
+                     <p class="text-gray-600 dark:text-gray-400"><strong>SI Unit:</strong> Kilogram per Cubic Meter (kg/m³)</p>
+                     <p class="text-gray-600 dark:text-gray-400"><strong>Commonly Used:</strong> Gram per Cubic Centimeter (g/cm³) or Gram per Milliliter (g/mL)</p>
+                 </div>
+             </div>
+        </div>
     </div>
-    
-    <footer>
-        <p>Density, Mass & Volume Calculator &copy; 2023 | For Educational Purposes</p>
-    </footer>
 
     <script>
+        // --- UI Logic ---
+        function switchTab(tabName) {
+            const panels = ['density', 'mass', 'volume'];
+            panels.forEach(panel => {
+                document.getElementById(`panel-${panel}`).classList.add('hidden');
+                document.getElementById(`tab-${panel}`).classList.remove('active');
+                document.getElementById(`tab-${panel}`).style.borderColor = 'transparent';
+            });
+            document.getElementById(`panel-${tabName}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.classList.add('active');
+            activeTab.style.borderColor = document.documentElement.classList.contains('dark') ? '#a5b4fc' : '#4f46e5';
+        }
+
+        // --- Calculation Logic ---
         function calculateDensity() {
-            const mass = parseFloat(document.getElementById('mass-density').value);
-            const volume = parseFloat(document.getElementById('volume-density').value);
-            const massUnit = document.getElementById('mass-unit-density').value;
-            const volumeUnit = document.getElementById('volume-unit-density').value;
-            
-            if (isNaN(mass) || isNaN(volume) || volume === 0) {
-                alert('Please enter valid values for mass and volume (volume cannot be zero).');
+            const mass = parseFloat(document.getElementById('d_mass').value);
+            const volume = parseFloat(document.getElementById('d_volume').value);
+            const resultDiv = document.getElementById('result-density');
+            const resultP = resultDiv.querySelector('p');
+
+            if (isNaN(mass) || isNaN(volume)) {
+                resultP.innerHTML = 'Please enter valid numbers for mass and volume.';
+                resultDiv.classList.remove('hidden');
                 return;
             }
-            
-            // Convert to consistent units for calculation
-            let convertedMass = mass;
-            let convertedVolume = volume;
-            
-            // Convert mass to grams if needed
-            if (massUnit === 'kg') convertedMass = mass * 1000;
-            else if (massUnit === 'lb') convertedMass = mass * 453.592;
-            
-            // Convert volume to cm³ if needed
-            if (volumeUnit === 'm3') convertedVolume = volume * 1000000;
-            else if (volumeUnit === 'L') convertedVolume = volume * 1000;
-            else if (volumeUnit === 'mL') convertedVolume = volume; // 1 mL = 1 cm³
-            
-            const density = convertedMass / convertedVolume;
-            
-            // Determine appropriate unit for result
-            let resultUnit = 'g/cm³';
-            if (massUnit === 'kg' && volumeUnit === 'm3') {
-                resultUnit = 'kg/m³';
-            } else if (massUnit === 'lb' && volumeUnit === 'ft3') {
-                resultUnit = 'lb/ft³';
+            if (volume === 0) {
+                resultP.innerHTML = 'Volume cannot be zero.';
+                resultDiv.classList.remove('hidden');
+                return;
             }
-            
-            document.getElementById('density-value').textContent = `Density = ${density.toFixed(4)} ${resultUnit}`;
-            document.getElementById('density-result').classList.add('show');
+
+            const density = mass / volume;
+            resultP.innerHTML = `Density: <span class="text-indigo-600 dark:text-indigo-400">${density.toFixed(4)} g/cm³</span>`;
+            resultDiv.classList.remove('hidden');
         }
-        
+
         function calculateMass() {
-            const density = parseFloat(document.getElementById('density-mass').value);
-            const volume = parseFloat(document.getElementById('volume-mass').value);
-            const densityUnit = document.getElementById('density-unit-mass').value;
-            const volumeUnit = document.getElementById('volume-unit-mass').value;
-            
+            const density = parseFloat(document.getElementById('m_density').value);
+            const volume = parseFloat(document.getElementById('m_volume').value);
+            const resultDiv = document.getElementById('result-mass');
+            const resultP = resultDiv.querySelector('p');
+
             if (isNaN(density) || isNaN(volume)) {
-                alert('Please enter valid values for density and volume.');
+                resultP.innerHTML = 'Please enter valid numbers for density and volume.';
+                resultDiv.classList.remove('hidden');
                 return;
             }
             
-            // Convert to consistent units for calculation
-            let convertedDensity = density;
-            let convertedVolume = volume;
+            const mass = density * volume;
+            resultP.innerHTML = `Mass: <span class="text-indigo-600 dark:text-indigo-400">${mass.toFixed(4)} grams</span>`;
+            resultDiv.classList.remove('hidden');
+        }
+
+        function calculateVolume() {
+            const mass = parseFloat(document.getElementById('v_mass').value);
+            const density = parseFloat(document.getElementById('v_density').value);
+            const resultDiv = document.getElementById('result-volume');
+            const resultP = resultDiv.querySelector('p');
             
-            // Convert density to g/cm³ if needed
-            if (densityUnit === 'kg/m3') convertedDensity = density / 1000;
-            else if (densityUnit === 'lb/ft3') convertedDensity = density * 0.0160185;
-            
-            // Convert volume to cm³ if needed
-            if (volumeUnit === 'm3') convertedVolume = volume * 1000000;
-            else if (volumeUnit === 'L') convertedVolume = volume * 1000;
-            else if (volumeUnit === 'mL') convertedVolume = volume; // 1 mL = 1 cm³
-            
-            const mass = convertedDensity * convertedVolume;
-            
-            // Determine appropriate unit for result
-            let resultUnit = 'g';
-            if (densityUnit === 'kg/m3' && volumeUnit === 'm3') {
-                resultUnit = 'kg';
-            } else if (densityUnit === 'lb/ft3' && volumeUnit === 'ft3') {
-                resultUnit = 'lb';
+            if (isNaN(mass) || isNaN(density)) {
+                resultP.innerHTML = 'Please enter valid numbers for mass and density.';
+                resultDiv.classList.remove('hidden');
+                return;
             }
-            
-            document.getElementById('mass-value').textContent = `Mass = ${mass.toFixed(4)} ${resultUnit}`;
-            document.getElementById('mass-result').classList.add('show');
+            if (density === 0) {
+                resultP.innerHTML = 'Density cannot be zero.';
+                resultDiv.classList.remove('hidden');
+                return;
+            }
+
+            const volume = mass / density;
+            resultP.innerHTML = `Volume: <span class="text-indigo-600 dark:text-indigo-400">${volume.toFixed(4)} cm³</span>`;
+            resultDiv.classList.remove('hidden');
+        }
+
+        // --- Dark Mode Toggle Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const tabs = ['density', 'mass', 'volume'];
+
+        function setActiveTabColor() {
+            const activeTab = document.querySelector('.tab-button.active');
+            if (activeTab) {
+                activeTab.style.borderColor = document.documentElement.classList.contains('dark') ? '#a5b4fc' : '#4f46e5';
+            }
+        }
+
+        // Check for saved theme in localStorage and apply it
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeToggleDarkIcon.classList.remove('hidden');
         }
         
-        function calculateVolume() {
-            const mass = parseFloat(document.getElementById('mass-volume').value);
-            const density = parseFloat(document.getElementById('density-volume').value);
-            const massUnit = document.getElementById('mass-unit-volume').value;
-            const densityUnit = document.getElementById('density-unit-volume').value;
-            
-            if (isNaN(mass) || isNaN(density) || density === 0) {
-                alert('Please enter valid values for mass and density (density cannot be zero).');
-                return;
+        // Set initial active tab color on load
+        setActiveTabColor();
+
+        themeToggleBtn.addEventListener('click', function() {
+            // toggle icons
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            // toggle theme
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
             }
-            
-            // Convert to consistent units for calculation
-            let convertedMass = mass;
-            let convertedDensity = density;
-            
-            // Convert mass to grams if needed
-            if (massUnit === 'kg') convertedMass = mass * 1000;
-            else if (massUnit === 'lb') convertedMass = mass * 453.592;
-            
-            // Convert density to g/cm³ if needed
-            if (densityUnit === 'kg/m3') convertedDensity = density / 1000;
-            else if (densityUnit === 'lb/ft3') convertedDensity = density * 0.0160185;
-            
-            const volume = convertedMass / convertedDensity;
-            
-            // Determine appropriate unit for result
-            let resultUnit = 'cm³';
-            if (massUnit === 'kg' && densityUnit === 'kg/m3') {
-                resultUnit = 'm³';
-            } else if (massUnit === 'lb' && densityUnit === 'lb/ft3') {
-                resultUnit = 'ft³';
-            } else if (densityUnit === 'g/cm3' && volume >= 1000) {
-                resultUnit = 'L';
-                document.getElementById('volume-value').textContent = `Volume = ${(volume/1000).toFixed(4)} L (${volume.toFixed(2)} cm³)`;
-                document.getElementById('volume-result').classList.add('show');
-                return;
-            }
-            
-            document.getElementById('volume-value').textContent = `Volume = ${volume.toFixed(4)} ${resultUnit}`;
-            document.getElementById('volume-result').classList.add('show');
-        }
+            setActiveTabColor();
+        });
     </script>
 </body>
 </html>
+
